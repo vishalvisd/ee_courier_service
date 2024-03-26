@@ -29,9 +29,24 @@ type FleetInfo = {
     maxWeight: number,
 }
 
+type ParsedUserInput = {
+    baseDeliveryCost: number,
+    packages: Array<PackageInfo>,
+    fleetInfo: FleetInfo | null
+}
+
+type InquireQuestion = {
+    type: "list" | "input" | "editor"
+    name: string,
+    message: string,
+    choices?: Array<String>
+}
+
 export {
     Coupon,
     Coupons,
     PackageInfo,
-    FleetInfo
+    FleetInfo,
+    ParsedUserInput,
+    InquireQuestion
 }

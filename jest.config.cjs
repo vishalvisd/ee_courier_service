@@ -1,9 +1,17 @@
 module.exports = {
     preset: 'ts-jest',
     transform: {
-        '^.+\\.(ts|tsx)?$': 'ts-jest',
-        '^.+\\.(js|jsx)$': 'babel-jest',
+        '^.+\\.(ts|tsx)?$': 'ts-jest'
     },
+    "globals": {
+        "ts-jest": {
+            "useESM": true
+        }
+    },
+    moduleNameMapper: {
+        "(.+)\\.js": "$1"
+    },
+    extensionsToTreatAsEsm: [".ts"],
     testMatch: [
         '<rootDir>/test/*.test.js',
         '<rootDir>/test/*.test.ts'

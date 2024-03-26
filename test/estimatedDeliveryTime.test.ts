@@ -1,5 +1,5 @@
-import estimatedDeliveryTime from "../src/estimatedDeliveryTime";
-import {FleetInfo, PackageInfo} from "../src/types";
+import estimatedDeliveryTime from "../src/estimatedDeliveryTime.js";
+import {FleetInfo, PackageInfo} from "../src/types.js";
 
 describe("Delivery time Calculation", ()=>{
     const packages: Array<PackageInfo> = [{

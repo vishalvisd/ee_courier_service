@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import {knapsack} from "./utils";
-import {computeDiscountAndDeliveryCost} from "./totalDeliveryCost";
-import {FleetInfo, PackageInfo} from "./types";
+import {knapsack} from "./utils.js";
+import {computeDiscountAndDeliveryCost} from "./totalDeliveryCost.js";
+import {FleetInfo, PackageInfo} from "./types.js";
 
 export const printResultsToConsole = (packages: Array<PackageInfo>): void => {
     _.forEach(packages, pkg =>{

@@ -6,6 +6,11 @@ describe("Core Functionality", ()=>{
         let packageWeights = [50, 75, 175, 110, 155];
         const maxCapacity = 200;
         let selection = [];
+        afterEach(()=>{
+            _.remove(packageWeights, (_v, index) =>{
+                return selection.includes(index)
+            })
+        })
         it("selects the right weights combination in the first iteration", ()=>{
             selection = knapsack(packageWeights, maxCapacity);
 
@@ -25,12 +30,6 @@ describe("Core Functionality", ()=>{
         it("selects the right weights combination in the fourth iteration", ()=>{
             selection = knapsack(packageWeights, maxCapacity);
             expect(selection.sort()).toEqual([0]);
-        })
-
-        afterEach(()=>{
-            _.remove(packageWeights, (_v, index) =>{
-                return selection.includes(index)
-            })
         })
     });
 })

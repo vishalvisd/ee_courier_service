@@ -22,7 +22,7 @@ describe("Cost Calculation", ()=>{
     });
 
     it("should calculate the delivery cost correct when package have offer code", ()=>{
-        const randomSelectedCouponName = _.keys(coupons)[_.random(0, _.size(coupons))]
+        const randomSelectedCouponName = _.keys(coupons)[_.random(0, _.size(coupons) - 1)]
         packageOne.couponCode = randomSelectedCouponName;
         const couponData = coupons[randomSelectedCouponName];
 

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {knapsack} from "../src/index";
+import {knapsack} from "../src/utils";
 
 describe("Core Functionality", ()=>{
     describe("Order of Package Delivery", ()=>{

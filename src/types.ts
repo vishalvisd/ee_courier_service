@@ -23,8 +23,15 @@ type PackageInfo = {
     deliveryTime?: number
 }
 
+type FleetInfo = {
+    num: number,
+    speed: number,
+    maxWeight: number,
+}
+
 export {
     Coupon,
     Coupons,
-    PackageInfo
+    PackageInfo,
+    FleetInfo
 }

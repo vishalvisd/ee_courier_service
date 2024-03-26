@@ -37,7 +37,7 @@ describe("Cost Calculation", ()=>{
             expectedDiscount = expectedDeliveryCost * couponData.discount_percent / 100;
         }
 
-        expect(deliveryCost).toBe(expectedDeliveryCost);
+        expect(deliveryCost).toBe(expectedDeliveryCost - expectedDiscount);
         expect(discount).toBe(expectedDiscount);
     })
 });

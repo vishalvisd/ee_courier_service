@@ -13,7 +13,9 @@ Please ensure **Docker** is installed on your system.
 >
 <br />
 
-The application can be run using the following commands ('cd' to the project root and run the following commands **(the first run will take longer).**)
+The application can be run using the following commands **(the first run will take longer).**
+
+> Download the repository as zip or git clone [https/ssh url] and 'cd' to project root
 
 One Time => **(sudo) docker build -t <image_name> .**
 >**sudo docker build -t kci_visd .**

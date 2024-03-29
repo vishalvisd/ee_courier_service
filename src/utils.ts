@@ -25,6 +25,12 @@ const knapsack = (packageWeights: Array<number>, maxCapacity: number):Array<numb
     return selectedItems;
 };
 
+const logErrorMessageAndExitProgram = (message: string)=>{
+    console.error(message);
+    process.exit();
+}
+
 export {
-    knapsack
+    knapsack,
+    logErrorMessageAndExitProgram,
 }

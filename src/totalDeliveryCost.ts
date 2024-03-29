@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import coupons from "./coupons.js";
-import {PackageInfo} from "./types.js";
+import {getPricingData} from "./pricingDataFileParser.js";
+import {Coupon, PackageInfo} from "./types.js";
 import {RATE_PER_KG, RATE_PER_KM} from "./constants.js";
 
 export const printResultsToConsole = (packages: Array<PackageInfo>) => {
@@ -10,23 +10,40 @@ export const printResultsToConsole = (packages: Array<PackageInfo>) => {
 }
 
 export const computeDiscountAndDeliveryCost = (pkg:PackageInfo, baseDeliveryCost: number):{deliveryCost: number, discount: number} => {
-    const deliveryCost = baseDeliveryCost + (pkg.weight * RATE_PER_KG) + (pkg.distance * RATE_PER_KM);
+    const pricingData = getPricingData()!;
 
-    // Calculate Discounts
-    let discount = 0;
-    const coupon = pkg.couponCode;
-    if (coupon){
-        if (_.keys(coupons).includes(coupon)){
-            const couponData = coupons[coupon];
-            if (pkg.distance >= couponData.conditions.minDistance
-                && pkg.distance <= couponData.conditions.maxDistance
-                && pkg.weight >= couponData.conditions.minWeight
-                && pkg.weight <= couponData.conditions.maxWeight){
-                discount = deliveryCost * couponData.discount_percent / 100;
+    const ratePerKg = _.get(pricingData, "rate_per_kg", RATE_PER_KG);
+    const ratePerKm = _.get(pricingData, "rate_per_km", RATE_PER_KM);
+    const deliveryCost = baseDeliveryCost + (pkg.weight * ratePerKg) + (pkg.distance * ratePerKm);
+
+    const availableCoupons = pricingData?.coupons;
+    let discountRate = 0;
+    const couponCodeAppliedOnPackage = pkg.couponCode;
+    if (availableCoupons){
+        const couponData:Coupon = availableCoupons[couponCodeAppliedOnPackage];
+        if (couponData){
+            let conditionMet = null;
+            for (let condition in couponData.conditions){
+                if (condition === 'minDistance'){
+                    conditionMet = pkg.distance >= couponData.conditions[condition]!
+                } else if (condition === 'maxDistance'){
+                    conditionMet = pkg.distance <= couponData.conditions[condition]!
+                } else if (condition === 'minWeight'){
+                    conditionMet = pkg.weight >= couponData.conditions[condition]!
+                } else if (condition === 'maxWeight'){
+                    conditionMet = pkg.weight <= couponData.conditions[condition]!
+                }
+                if (conditionMet === false){
+                    break;
+                }
+            }
+            if (conditionMet){
+                discountRate = couponData.discount_percent / 100;
             }
         }
     }
 
+    const discount = deliveryCost * discountRate;
     return {
         deliveryCost: _.round(deliveryCost - discount, 2),
         discount

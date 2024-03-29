@@ -1,14 +1,14 @@
 type Coupon = {
     discount_percent: number,
     conditions: {
-        "minDistance": number,
-        "maxDistance": number,
-        "minWeight": number,
-        "maxWeight": number
+        "minDistance"?: number,
+        "maxDistance"?: number,
+        "minWeight"?: number,
+        "maxWeight"?: number
     }
 }
 
-type Coupons <Coupon> = {
+type Coupons = {
     [key: string]: Coupon
 }
 
@@ -17,7 +17,7 @@ type PackageInfo = {
     weight: number,
     distance: number,
     couponCode: string,
-    index: number
+    index: number,
     discount?: number,
     deliveryCost?: number,
     deliveryTime?: number
@@ -42,9 +42,16 @@ type InquireQuestion = {
     choices?: Array<String>
 }
 
+type PricingData = {
+    rate_per_km: number,
+    rate_per_kg: number,
+    coupons: Coupons
+}
+
 export {
     Coupon,
     Coupons,
+    PricingData,
     PackageInfo,
     FleetInfo,
     ParsedUserInput,

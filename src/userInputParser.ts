@@ -1,9 +1,15 @@
 import _ from "lodash";
 import {PackageInfo, ParsedUserInput} from "./types.js";
 
-const verifyAndParseNumeric = (val: string):number=>{
+const verifyAndParsePositiveNumeric = (val: string, includeZero = true):number=>{
     const numericVal = _.toNumber(val);
-    if (!_.isNaN(numericVal)){
+    if (!_.isNaN(numericVal) && val !== ""){
+        if (numericVal < 0){
+            throw new Error(`Failed to parse, expected Numeric value -${val}, expected positive value!`);
+        }
+        if (numericVal === 0 && !includeZero){
+            throw new Error(`Failed to parse, expected Numeric value -${val} greater than 0!`)
+        }
         return numericVal;
     }
     throw new Error(`Failed to parse, expected Numeric value ${val}`)
@@ -19,8 +25,8 @@ export default function (input:string):ParsedUserInput{
         const lines = sanitizeLines(_.split(input, "\n"));
 
         const splittedValues = _.split(lines[0], /\s+/);
-        const baseDeliveryCost = verifyAndParseNumeric(splittedValues[0]);
-        const numOfPackages = verifyAndParseNumeric(splittedValues[1]);
+        const baseDeliveryCost = verifyAndParsePositiveNumeric(splittedValues[0]);
+        const numOfPackages = verifyAndParsePositiveNumeric(splittedValues[1], false);
 
         // Check if we have got input for all the asked number of packages
         const packages:Array<PackageInfo> = Array(numOfPackages).fill(0).map((pkg, index) => {
@@ -29,8 +35,8 @@ export default function (input:string):ParsedUserInput{
             return {
                 index,
                 id: splittedValues[0],
-                weight: verifyAndParseNumeric(splittedValues[1]),
-                distance: verifyAndParseNumeric(splittedValues[2]),
+                weight: verifyAndParsePositiveNumeric(splittedValues[1], false),
+                distance: verifyAndParsePositiveNumeric(splittedValues[2], false),
                 couponCode: splittedValues[3]
             }
         });
@@ -40,9 +46,9 @@ export default function (input:string):ParsedUserInput{
             const fleetInfoLine = lines[numOfPackages+1];
             const splittedValues = _.split(fleetInfoLine, /\s+/);
             fleetInfo = {
-                num: verifyAndParseNumeric(splittedValues[0]),
-                speed: verifyAndParseNumeric(splittedValues[1]),
-                maxWeight: verifyAndParseNumeric(splittedValues[2]),
+                num: verifyAndParsePositiveNumeric(splittedValues[0], false),
+                speed: verifyAndParsePositiveNumeric(splittedValues[1], false),
+                maxWeight: verifyAndParsePositiveNumeric(splittedValues[2], false),
             }
         }
 
@@ -55,5 +61,4 @@ export default function (input:string):ParsedUserInput{
     } catch (err){
         throw new Error(`Input Parsing failed: ${err}`);
     }
-
 }

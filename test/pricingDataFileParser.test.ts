@@ -199,10 +199,10 @@ describe("User provided Pricing Data Json file parsing functionality", ()=>{
     afterEach(()=>{
         jest.clearAllMocks();
     })
-    afterAll(()=>{
+    afterAll(()=> {
         // Delete the temporary pricing file created for test purpose
         fs.rmSync(testPricingFilePath);
-    })
+    });
 });
 
 describe("Improper formatted JSON file causes program to exit", ()=>{
@@ -227,12 +227,12 @@ describe("Improper formatted JSON file causes program to exit", ()=>{
 
         parsePricingData()
         expect(logErrorMessageAndExitProgram).toHaveBeenCalled();
-    });
+    })
 
-    afterAll(()=>{
+    afterAll(()=> {
         // Delete the temporary pricing file created for test purpose
         fs.rmSync(testPricingFilePath);
-    })
+    });
 });
 
 describe("Read Pricing file from various locations in expected order", ()=>{
@@ -300,7 +300,7 @@ describe("Read Pricing file from various locations in expected order", ()=>{
         expect(retrievedPricingData).toEqual(null);
     });
 
-    afterAll(()=>{
+    afterAll(()=> {
         // Delete the temporary pricing file created for test purpose
         fs.rmSync(testPricingFilePath);
     })

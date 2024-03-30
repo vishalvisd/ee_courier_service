@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import {knapsack, logErrorMessageAndExitProgram} from "../src/utils.js";
+import {knapsack, logErrorMessageAndExitProgram, printableNumber} from "../src/utils.js";
 
 describe("Order of delivery functionality", ()=>{
     describe("Order of Package Delivery", ()=>{
@@ -53,3 +53,13 @@ describe("Log and exit functionality", ()=>{
         jest.clearAllMocks();
     })
 });
+
+describe("Pritable number function", ()=>{
+    it("should return 'N/A' for non numberic value", ()=>{
+        const badNumbers = ['undefined', 'null', '-Infinity', 'Infinity', '', 'NaN'];
+        badNumbers.forEach(badNumber => {
+            const returnVal = printableNumber(badNumber);
+            expect(returnVal).toEqual('N/A');
+        })
+    })
+})

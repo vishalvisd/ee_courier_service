@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import {knapsack} from "./utils.js";
+import {knapsack, printableNumber} from "./utils.js";
 import {computeDiscountAndDeliveryCost} from "./totalDeliveryCost.js";
 import {FleetInfo, PackageInfo} from "./types.js";
 
 export const printResultsToConsole = (packages: Array<PackageInfo>): void => {
     _.forEach(packages, pkg =>{
-        console.log(`${pkg.id} ${pkg.discount} ${pkg.deliveryCost} ${pkg.deliveryTime}`)
+        console.log(`${pkg.id} ${printableNumber(`${pkg.discount}`)} ${printableNumber(`${pkg.deliveryCost}`)} ${printableNumber(`${pkg.deliveryTime}`)}`)
     })
 }
 

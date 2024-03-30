@@ -1,4 +1,5 @@
 import _ from "lodash";
+import {NOT_AVAILABLE} from "./constants.js";
 
 const knapsack = (packageWeights: Array<number>, maxCapacity: number):Array<number>=>{
     const numberOfPackages = _.size(packageWeights);
@@ -25,6 +26,16 @@ const knapsack = (packageWeights: Array<number>, maxCapacity: number):Array<numb
     return selectedItems;
 };
 
+const printableNumber = (value: string)=>{
+    let numeric:string|number = NOT_AVAILABLE;
+
+    if (value !== ""){
+        const toNum = _.toNumber(value);
+        if (!_.isNaN(toNum) && _.isFinite(toNum)) numeric = toNum;
+    }
+    return numeric;
+}
+
 const logErrorMessageAndExitProgram = (message: string)=>{
     console.error(message);
     process.exit();
@@ -33,4 +44,5 @@ const logErrorMessageAndExitProgram = (message: string)=>{
 export {
     knapsack,
     logErrorMessageAndExitProgram,
+    printableNumber
 }

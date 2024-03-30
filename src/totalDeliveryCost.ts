@@ -1,11 +1,12 @@
 import _ from 'lodash';
+import {printableNumber} from "./utils.js";
 import {getPricingData} from "./pricingDataFileParser.js";
 import {Coupon, PackageInfo} from "./types.js";
 import {DEFAULT_RATE_PER_KG, DEFAULT_RATE_PER_KM} from "./constants.js";
 
 export const printResultsToConsole = (packages: Array<PackageInfo>) => {
     _.forEach(packages, pkg => {
-        console.log(`${pkg.id} ${pkg.discount} ${pkg.deliveryCost}`)
+        console.log(`${pkg.id} ${printableNumber(`${pkg.discount}`)} ${printableNumber(`${pkg.deliveryCost}`)}`)
     })
 }
 

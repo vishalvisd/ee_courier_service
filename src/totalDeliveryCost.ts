@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {getPricingData} from "./pricingDataFileParser.js";
 import {Coupon, PackageInfo} from "./types.js";
-import {RATE_PER_KG, RATE_PER_KM} from "./constants.js";
+import {DEFAULT_RATE_PER_KG, DEFAULT_RATE_PER_KM} from "./constants.js";
 
 export const printResultsToConsole = (packages: Array<PackageInfo>) => {
     _.forEach(packages, pkg => {
@@ -12,8 +12,8 @@ export const printResultsToConsole = (packages: Array<PackageInfo>) => {
 export const computeDiscountAndDeliveryCost = (pkg:PackageInfo, baseDeliveryCost: number):{deliveryCost: number, discount: number} => {
     const pricingData = getPricingData()!;
 
-    const ratePerKg = _.get(pricingData, "rate_per_kg", RATE_PER_KG);
-    const ratePerKm = _.get(pricingData, "rate_per_km", RATE_PER_KM);
+    const ratePerKg = _.get(pricingData, "rate_per_kg", DEFAULT_RATE_PER_KG);
+    const ratePerKm = _.get(pricingData, "rate_per_km", DEFAULT_RATE_PER_KM);
     const deliveryCost = baseDeliveryCost + (pkg.weight * ratePerKg) + (pkg.distance * ratePerKm);
 
     const availableCoupons = pricingData?.coupons;

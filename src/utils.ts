@@ -37,7 +37,7 @@ const printableNumber = (value: string)=>{
 }
 
 const logErrorMessageAndExitProgram = (message: string)=>{
-    console.error(message);
+    console.error(`Error: ${message}`);
     process.exit();
 }
 

@@ -44,7 +44,7 @@ describe("Delivery Cost Calculation", () => {
         const computeForGivenRates = () => {
             const pricingData = getPricingData()!;
             programInputs.forEach((programInput, index) => {
-                const parsedInput: ParsedUserInput = userInputParser(programInput);
+                const parsedInput: ParsedUserInput = userInputParser(programInput)!;
 
                 const {packages, baseDeliveryCost} = parsedInput;
                 const packageOne = packages[0];

@@ -2,11 +2,13 @@ import path from "node:path";
 import _ from "lodash";
 import fs from "node:fs";
 import {PricingData} from "./types.js";
-import {DEFAULT_PRICING_FILE_NAME, PRICING_FILE_PATH_ENVIRONMENT_VARIABLE} from "./constants.js";
+import {DEFAULT_PRICING_FILE_PATH, PRICING_FILE_PATH_ENVIRONMENT_VARIABLE} from "./constants.js";
 import {logErrorMessageAndExitProgram} from "./utils.js";
 import pricingSchema, {ajv} from "./pricingSchema.js";
 
-const DEFAULT_PRICINGDATA_FILE_PATH = path.join(process.cwd(), DEFAULT_PRICING_FILE_NAME);
+const DEFAULT_PRICINGDATA_FILE_PATH = DEFAULT_PRICING_FILE_PATH;
+const PRICING_FILE_PATH_OPTION = '-p';
+
 let pricingData:PricingData | null = null;
 console.log("Default pricing data file path:", DEFAULT_PRICINGDATA_FILE_PATH);
 
@@ -39,19 +41,17 @@ const readPricingDataFile = (path: string): PricingData | undefined => {
 
 export default function () {
     pricingData = null;
-    const args = process.argv;
-    const metaFileKey = '-p';
+
     let metaFilePath = null;
-    const argKey = _.get(args, '[2]', null);
-    if (argKey === metaFileKey) {
-        metaFilePath = _.get(args, '[3]', '') as string;
+    if (_.get(process.argv, '[2]', null) === PRICING_FILE_PATH_OPTION) {
+        metaFilePath = _.get(process.argv, '[3]', '') as string;
         pricingData = readPricingDataFile(metaFilePath)!;
-    } // check if the pricing data file is at the process root location
-    else if (fs.existsSync(DEFAULT_PRICINGDATA_FILE_PATH)) {
+    } else if (fs.existsSync(DEFAULT_PRICINGDATA_FILE_PATH)) {
+        // check if the pricing data file is at the process root location
         console.log(`Using Pricing data file [default path] ${DEFAULT_PRICINGDATA_FILE_PATH}`)
         pricingData = readPricingDataFile(DEFAULT_PRICINGDATA_FILE_PATH)!;
-    } // check if the pricing data file path is defined as environment variable
-    else if (process.env[PRICING_FILE_PATH_ENVIRONMENT_VARIABLE]) {
+    } else if (process.env[PRICING_FILE_PATH_ENVIRONMENT_VARIABLE]) {
+        // check if the pricing data file path is defined as environment variable
         console.log("Using Pricing data file path from environment variable 'PRICING_FILE'")
         pricingData = readPricingDataFile(process.env[PRICING_FILE_PATH_ENVIRONMENT_VARIABLE])!;
     } else {

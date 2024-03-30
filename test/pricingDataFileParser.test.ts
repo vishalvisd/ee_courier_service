@@ -4,7 +4,7 @@ import path from "node:path";
 import parsePricingData, {getPricingData} from "../src/pricingDataFileParser.js";
 import pricingSchema, {ajv} from "../src/pricingSchema.js";
 import {logErrorMessageAndExitProgram} from "../src/utils.js";
-import {DEFAULT_PRICING_FILE_NAME, PRICING_FILE_PATH_ENVIRONMENT_VARIABLE} from "../src/constants.js";
+import {DEFAULT_PRICING_FILE_PATH, PRICING_FILE_PATH_ENVIRONMENT_VARIABLE} from "../src/constants.js";
 
 describe("User provided Pricing Data Json file parsing functionality", ()=>{
     // With 'pricingSchema.ts' file, we are already validating the provided pricing file's JSON contents
@@ -255,13 +255,12 @@ describe("Read Pricing file from various locations in expected order", ()=>{
             "rate_per_kg": _.random(121, 7656),
             "rate_per_km": _.random(121, 7656)
         };
-        const defaultFilePath = path.join(process.cwd(), DEFAULT_PRICING_FILE_NAME);
-        createFileAndSetNodeArgs(pricingData, defaultFilePath);
+        createFileAndSetNodeArgs(pricingData, DEFAULT_PRICING_FILE_PATH);
         process.argv = process.argv.slice(0,2);
         parsePricingData();
 
         // Delete the temporary pricing file created for test purpose
-        fs.rmSync(defaultFilePath);
+        fs.rmSync(DEFAULT_PRICING_FILE_PATH);
 
         const retrievedPricingData = getPricingData();
 
@@ -300,9 +299,25 @@ describe("Read Pricing file from various locations in expected order", ()=>{
         expect(retrievedPricingData).toEqual(null);
     });
 
+    let defaultFileBackupContents = '';
+    beforeEach(()=>{
+        // Take Backup of existing default pricing data file
+        // Read file if present
+        const defaultFileExits = fs.existsSync(DEFAULT_PRICING_FILE_PATH);
+        if (defaultFileExits){
+            defaultFileBackupContents = fs.readFileSync(DEFAULT_PRICING_FILE_PATH, 'utf-8');
+            fs.rmSync(DEFAULT_PRICING_FILE_PATH);
+        }
+    });
+    afterEach(()=>{
+        // Restore default file if backup exists
+        if (defaultFileBackupContents){
+            fs.writeFileSync(DEFAULT_PRICING_FILE_PATH, defaultFileBackupContents);
+        }
+    })
     afterAll(()=> {
         // Delete the temporary pricing file created for test purpose
-        fs.rmSync(testPricingFilePath);
+        if (fs.existsSync(testPricingFilePath)) fs.rmSync(testPricingFilePath);
     })
 })
 

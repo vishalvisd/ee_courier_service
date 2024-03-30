@@ -1,4 +1,5 @@
 import userInputParser from "../src/userInputParser.js";
+import {logErrorMessageAndExitProgram} from "../src/utils.js";
 
 describe("User Input parse to take business defined user inputs only", ()=>{
     it("Input Parse should throw error for bad inputs", ()=>{
@@ -28,19 +29,27 @@ describe("User Input parse to take business defined user inputs only", ()=>{
             `100 1\npkg1 50 100\n2 -1 100`,
             `100 1\npkg1 50 100\n2 200 0`,
             `100 1\npkg1 50 100\n2 200 -1`,
+            `100 2\npkg1 50 100`,
+            ''
         ];
 
         const BAD_INPUT_START_INDEX = 2;
 
         programInputs.forEach((programInput, index) => {
-            const t = ()=>{
-                userInputParser(programInput);
-            }
+            jest.resetAllMocks();
+            userInputParser(programInput);
             if (index < BAD_INPUT_START_INDEX){
-                expect(t).not.toThrow(Error);
+                expect(logErrorMessageAndExitProgram).not.toHaveBeenCalled();
             } else {
-                expect(t).toThrow(Error);
+                expect(logErrorMessageAndExitProgram).toHaveBeenCalled();
             }
         })
     })
-})
+});
+
+jest.mock('../src/utils', () => ({
+    ...jest.requireActual('../src/utils'),
+    logErrorMessageAndExitProgram: jest.fn(),
+}));
+//@ts-ignore
+logErrorMessageAndExitProgram.mockImplementation(() => {});

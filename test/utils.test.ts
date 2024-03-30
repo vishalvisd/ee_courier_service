@@ -45,7 +45,7 @@ describe("Log and exit functionality", ()=>{
         logErrorMessageAndExitProgram(logMessage);
 
         //@ts-ignore
-        expect(console.error.mock.calls[0][0]).toBe(logMessage);
+        expect(console.error.mock.calls[0][0]).toBe(`Error: ${logMessage}`);
         expect(mockExit).toHaveBeenCalled();
     });
 
